@@ -1,3 +1,5 @@
+.snakemake/
+*.png
 __pycache__/
 *.pyc
 

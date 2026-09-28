@@ -32,3 +32,9 @@ conda activate cspc
 * **PW1 - Lab A** helped me learn the basics of working with Python environments, Git, automated testing, and NumPy.
 * I learned how to test different parts of a program and compare the performance of two implementations. I faced some problems with the Conda environment, file locations, Git setup, and getting the test parameters correct, but I was able to solve eventually.
 * AI helped me a little during the lab, mostly by explaining errors and guiding me through some of the setup and testing steps.
+
+## CSPC - PW1 Lab B
+
+The observed decay data showed a decrease in the count as time increased. The observed data followed the same general exponential-decay shape as the analytical law N₀e⁻λᵗ with λ = 0.3, so the two matched reasonably well.
+
+The Snakemake pipeline automatically runs plot.py to generate figure.png from decay_observed.csv, and only reruns the step when its input files have changed.
