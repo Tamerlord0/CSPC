@@ -233,3 +233,130 @@ The categories were nearly balanced, so predicting the target without additional
 Across these practicals, I worked with reproducible environments, automated testing, numerical methods, optimisation, and statistical analysis. I learned how to compare algorithms, analyse scientific data, and interpret statistical results.
 
 The chemical analysis was especially useful because it showed that a strong correlation can be misleading. After accounting for other variables, benzene remained significantly associated with malignancy while cadmium did not. This demonstrated why confounding variables must be considered before drawing conclusions.
+
+## PW4 - Machine Learning: Supervised and Unsupervised
+
+### Session A - Concrete Compressive Strength (Supervised Learning)
+
+**Dataset:** UCI Concrete Compressive Strength (`data/concrete.csv`) — 1,030 laboratory tests (1,005 unique rows after cleaning) with 8 inputs and 1 continuous target.
+
+| Variable | Description | Unit |
+|---|---|---|
+| `cement` | Blast furnace cement | kg/m³ |
+| `slag` | Blast furnace slag | kg/m³ |
+| `ash` | Fly ash | kg/m³ |
+| `coarse_agg` | Coarse aggregate (gravel) | kg/m³ |
+| `fine_agg` | Fine aggregate (sand) | kg/m³ |
+| `water` | Water | kg/m³ |
+| `superplastic` | Superplasticizer additive | kg/m³ |
+| `age` | Curing time | days |
+| `strength` | Compressive strength (target) | MPa |
+
+**Data Cleaning and Exploration**
+
+I checked for missing values (0 found) and duplicate rows (25 found), then removed the duplicates before splitting. Keeping duplicate rows would cause data leakage if the same test appeared in both the training and test sets, artificially inflating test scores.
+
+From `describe()`, aggregate features (`coarse_agg`, `fine_agg`) and `cement` operate on scales of hundreds of kg/m³, while `superplastic` and `age` have much smaller numerical ranges. Strength increased linearly with `cement`, while strength vs. `age` followed a curved, logarithmic trend with fast gains early on that flattened over time.
+
+**Output:** `eda_plots.png`
+
+**Linear and Polynomial Regression**
+
+I split the data (80% train, 20% test) and fitted a multiple linear regression model. Plotting test residuals against `age` on a log scale showed a systematic curved pattern, indicating that a linear model could not capture the non-linear curing behavior.
+
+To capture non-linearity, I tested polynomial features from degree 1 to 4 inside a pipeline with `StandardScaler()`:
+
+| Degree | Features ($p$) | Behavior |
+|---:|---:|---|
+| 1 | 8 | Baseline linear fit; underfits non-linear curing trends. |
+| 2 | 44 | **Chosen model.** Significantly lowers test RMSE and raises test $R^2$ without overfitting. |
+| 3 | 164 | Slight improvement on train, but test error begins to plateau. |
+| 4 | 495 | **Severe overfitting.** Feature count approaches training row count ($n \approx 804$), causing test $R^2$ to collapse. |
+
+Adjusted $R^2$ alone does not protect against degree 4 overfitting because it is calculated strictly on the training data.
+
+**Output:** `residuals.png`
+
+**Classification: KNN and Decision Tree**
+
+I converted `strength` into a binary target (`1` if $\ge 40\text{ MPa}$, `0` otherwise) and used a stratified 80/20 split.
+
+* **K-Nearest Neighbors (KNN):** Sweeping $K \in \{1, 3, 5, 7, 15, 25, 51, 101\}$ showed that $K=1$ overfitted and very large $K$ underfitted. **$K=7$** gave the best balance of test accuracy and stability. Removing `StandardScaler()` caused accuracy to drop significantly because distance calculations were dominated by large-scale aggregate columns. Testing across 5 random seeds (`0..4`) showed a narrow spread, confirming the result was stable.
+* **Decision Tree:** Sweeping `max_depth` showed that an unlimited tree (`None`) reached 100% training accuracy while test accuracy dropped due to overfitting. **`max_depth = 4`** was chosen because it achieved near-peak test accuracy while remaining easy to read. The root split divided mixes based on `age` or `cement`, which aligns with physical hydration rules.
+
+**Outputs:** `knn_acc.png`, `tree_acc.png`
+
+**Metrics and Safety Thresholds**
+
+On a construction site, a **False Positive (FP)**—predicting a batch reaches 40 MPa when it actually does not—is the dangerous mistake because it risks structural failure. **Precision** directly controls False Positives.
+
+Sweeping probability thresholds ($0.3, 0.5, 0.7, 0.9$) showed that raising the threshold to **0.7 or 0.9** pushed False Positives near zero and maximized Precision. The cost of a safer threshold is higher False Negatives (FN), meaning safe concrete batches get rejected, increasing material waste.
+
+**Output:** `A_metrics.csv`
+
+**Feature Importance and Physics Bonus**
+
+Raw regression coefficients cannot be compared directly because they carry different units ($\text{MPa per kg/m}^3$ vs. $\text{MPa per day}$). Standardized coefficients, decision tree importances, and permutation importances all agreed that `age`, `cement`, and `water` were the strongest predictors. This matches concrete engineering principles (hydration time and water-to-cement ratio), though high statistical importance alone does not prove physical causation without controlled experiments.
+
+In the bonus step, replacing raw inputs with two domain-engineered features—$\log(\text{age})$ and the water-to-binder ratio $w/b = \text{water} / (\text{cement} + \text{slag} + \text{ash})$—achieved strong test $R^2$ using only 2 features, showing that physical domain knowledge outperforms blind polynomial expansion.
+
+**Output:** `feature_importance.png`
+
+---
+
+### Session B - Wine Chemistry (Unsupervised Learning)
+
+**Dataset:** UCI Wine dataset — 178 Italian wines across 3 grape cultivars, described by 13 chemical measurements. Cultivar labels were hidden until the final evaluation.
+
+**PCA: Raw vs. Scaled Data**
+
+From `describe()`, `proline` and `magnesium` had the largest numerical ranges and standard deviations, while `nonflavanoid_phenols` and `hue` had the smallest.
+
+* **Raw PCA:** Running PCA without scaling caused PC1 to capture over 99% of total variance, almost entirely driven by `proline`. This did not reflect true chemical differences—only differences in measurement scale.
+* **Scaled PCA:** Applying `StandardScaler()` first put all 13 chemicals on equal footing. **8 principal components** were needed to capture 90% of the cumulative variance, while the PC1–PC2 plane captured about 55%. PC1 separated wines by phenol, flavonoid, and color intensity levels, while PC2 separated wines by alcohol, ash, and acid content.
+
+**Outputs:** `scree_plot.png`, `pca_unlabeled.png`
+
+**K-Means Clustering**
+
+Running K-Means with `n_init=1` across seeds `0..7` produced different inertia values because random starting centroids can get trapped in local minima. Using `n_init=10` ran 10 initializations and kept the lowest inertia solution.
+
+Plotting inertia for $k = 1 \dots 10$ showed a clear elbow at **$k = 3$**. Choosing $k$ simply by minimizing inertia is invalid because inertia drops to 0 when $k = n$ (every point in its own cluster).
+
+Converting the $k=3$ cluster centers back to real units revealed three distinct chemical profiles:
+
+* **Cluster 0:** High flavonoids and total phenols with moderate alcohol.
+* **Cluster 1:** High alcohol, high proline, and deep color intensity.
+* **Cluster 2:** High malic acid and non-flavonoid phenols with low total phenols and lower alcohol.
+
+**Outputs:** `kmeans_elbow.png`, `pca_clusters.png`
+
+**Comparison with True Cultivars**
+
+Comparing K-Means clusters ($k=3$) against the hidden cultivar labels using a crosstab gave the following majority-matching agreement scores:
+
+| Feature Space | Agreement Score | Explanation |
+|---|---:|---|
+| Scaled Data (13 features) | Highest (~96.6%) | All chemical features contribute equally. |
+| Top 2 PCs (Scaled) | Slightly lower (~95.5%) | Dropping PCs 3–13 loses minor separating details. |
+| Raw Unscaled Data | Lowest (~70.2%) | Dominated by `proline` scale rather than full chemistry. |
+
+Even though K-Means never saw the cultivar labels, it recovered the three grape varieties with over 96% agreement on scaled data, demonstrating that the cultivars possess distinct, well-separated chemical signatures.
+
+**Output:** `B_agreement.csv`
+
+---
+
+**Bonus - Supervised Comparison**
+
+Splitting the wine dataset (`test_size=0.25`, `random_state=42`, `stratify=cultivar`) and training supervised KNN classifiers (`n_neighbors=5`) gave a test accuracy of **97.78%** (44/45) on all 13 scaled features and **95.56%** (43/45) using only the top 2 principal components.
+
+These supervised accuracies are slightly higher than the unsupervised K-Means agreement scores from B6 (~96.6% and ~95.5%). However, **this comparison is not completely fair** because:
+* **Data usage:** K-Means was evaluated across all 178 wines without ever seeing any ground-truth labels during training, whereas KNN learned directly from 75% of the labeled wines and was scored only on the remaining 25% test split.
+* **Metric optimization:** In B6, cluster numbers were assigned arbitrarily and matched post-hoc by majority vote, whereas supervised KNN explicitly optimized class boundaries using the true labels.
+
+### Snakemake Automation and Overall Conclusion
+
+**Reproducible Workflow:** I automated the entire PW4 pipeline using a `Snakefile` with rules `all`, `fetch`, `session_a`, and `session_b`. Running `snakemake --cores 1` executes all scripts in dependency order and generates all outputs from scratch. Running it a second time reports *"Nothing to be done"* because all targets are up to date. Editing a parameter in `sessionA.py` causes only `session_a` to rerun, leaving `fetch` and `session_b` untouched because their inputs did not change.
+
+**Conclusion:** Across Sessions A and B, I applied supervised regression, classification, dimensionality reduction, and clustering to physical and chemical datasets. Both labs highlighted the critical role of feature scaling and domain knowledge: unscaled inputs distorted distance-based models (KNN, PCA, K-Means), while physical insight (water-to-binder ratio, logarithmic curing time, and safety-driven precision thresholds) produced more reliable and interpretable scientific models.

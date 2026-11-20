@@ -9,8 +9,7 @@ def k_imbalance(x):
     return (2*x)**2 / ((a-x)*(b-x)) - K
 
 x_newton = newton(k_imbalance, 0.5)
-result = minimize(lambda x: k_imbalance(x[0])**2, [0.5],
-                  method="SLSQP", bounds=[(0, 0.999)])
+result = minimize(lambda x: k_imbalance(x[0])**2, [0.5], method="SLSQP", bounds=[(0, 0.999)])
 x_slsqp = result.x[0]
 
 H2 = a - x_newton
