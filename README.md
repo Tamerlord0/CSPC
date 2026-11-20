@@ -387,3 +387,85 @@ These supervised accuracies are slightly higher than the unsupervised K-Means ag
 Across these practicals, I worked with reproducible environments, automated testing, numerical methods, optimisation, statistical analysis, and machine learning. I learned how to compare algorithms, analyse scientific data, and interpret statistical and model results.
 
 In PW3 and PW4, the analyses demonstrated how misleading raw data can be without proper methodology: confounding variables distorted simple correlations, while unscaled inputs distorted distance-based models (KNN, PCA, K-Means). Combining proper validation, feature scaling, and physical domain knowledge (water-to-binder ratio, logarithmic curing time, and safety-driven precision thresholds) produced more reliable and interpretable scientific models.
+
+
+# Practical Work 5: Signal Processing — Earthquake Location and Magnitude
+
+## Summary of Results
+
+| Event | $t_P$ (s) | $t_S$ (s) | Distance $R$ (km) | PGV (cm/s) | Magnitude $M$ |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `seismogram_A.csv` | 108.42 | 144.08 | 306.13 | 1.5105 | 6.66 |
+| `seismogram_B.csv` | 84.25 | 102.43 | 156.07 | 0.5711 | 5.36 |
+
+* **Closer earthquake:** `seismogram_B.csv` (156.07 km vs. 306.13 km)
+* **Stronger earthquake:** `seismogram_A.csv` ($M = 6.66$ vs. $M = 5.36$)
+
+---
+
+## Step 1: Look at the Record
+![Three Channels](results/step1_record.png)
+![First 60 Seconds](results/step1_zoom60.png)
+
+* **Observations:** The first, weaker P-wave shaking appears most clearly on the vertical (**Z**) channel because P-waves push and pull ground particles vertically as they arrive steeply from depth. The later, stronger S-wave and surface wave shaking is largest on the horizontal (**N** and **E**) channels due to horizontal shear motion.
+* **First 60 s:** The station is not completely still before the earthquake; continuous low-amplitude background seismic noise is always present.
+
+---
+
+## Step 2: The Frequency Spectrum
+![FFT Array Index vs Frequency](results/step2a_fft.png)
+![Log-Log Spectrum](results/step2b_loglog.png)
+
+* **What `fftfreq` adds & mirroring:** `fftfreq` maps each array index to its physical frequency in Hz using the sampling interval $1/f_s$. Because the input signal is purely real-valued, its Fourier transform is conjugate-symmetric, causing the positive and negative frequency amplitudes to mirror each other around $0\text{ Hz}$.
+* **Background noise vs. earthquake energy:** The quiet background noise (ocean microseism) is strongest at low frequencies around **$0.1\text{–}0.3\text{ Hz}$**. The earthquake adds most of its energy in the **$0.5\text{–}10\text{ Hz}$** band.
+
+---
+
+## Step 3: Inverse Transform & Band-Pass Filter
+![Removed Noise](results/step3_removed.png)
+
+* **Why filtering relies on `allclose`:** `ifft(fft(Z)).real` reconstructs the exact original signal, proving the Fourier transform is lossless and invertible. Zeroing out unwanted frequencies in the frequency domain therefore modifies only those specific components when transforming back to time.
+* **Cut-off justification ($0.5\text{–}10\text{ Hz}$):** The $0.5\text{ Hz}$ high-pass cut-off removes the strong low-frequency ocean microseism noise below $0.5\text{ Hz}$, while the $10\text{ Hz}$ low-pass cut-off removes high-frequency instrument/cultural noise above the earthquake's main energy band.
+* **What was removed ($Z - Z_{\text{clean}}$):** The removed signal shows the continuous, slow-oscillating microseism wave train present throughout the entire recording.
+
+---
+
+## Step 4: The Envelope
+![Envelopes Comparison](results/step4_envelopes.png)
+
+* **Window size effects:** A window that is **too short** ($0.05\text{ s}$) follows individual wave oscillations instead of smoothing them, creating jagged spikes that can trigger false arrivals. A window that is **too long** ($5\text{ s}$) smears the signal out in time, flattening the onset and delaying the apparent start of the shaking.
+
+---
+
+## Step 5: Arrival Times
+![Arrival Times](results/step5_arrivals.png)
+
+* **Why not use the maximum as arrival time:** For `seismogram_A.csv`, $t_S = 144.08\text{ s}$, whereas the horizontal envelope maximum occurs later at $152.03\text{ s}$. An arrival time marks the *first* energy reaching the station via the fastest path; peak amplitude arrives later as scattered waves and slower surface waves build up. Using the maximum would overestimate $t_S - t_P$ and yield a falsely large distance $R$.
+
+---
+
+## Step 6: Distance and Origin Time
+* **Distance & Uncertainty:** For `seismogram_A.csv`, $R = 306.13\text{ km}$. A $1\text{ s}$ uncertainty in $t_S$ changes $R$ by $\frac{1}{1/3.6 - 1/6.2} \approx \mathbf{8.58\text{ km}}$.
+* **Origin Time:** $t_0 = t_P - R / v_P = 108.42 - 306.13 / 6.2 = \mathbf{59.04\text{ s}}$.
+
+---
+
+## Step 7: The Spectrogram
+![Spectrogram](results/step7_spectrogram.png)
+
+* **Wave identification:** The **P-wave** arrives first ($\sim 108\text{ s}$) with the **highest frequencies** (up to $10\text{ Hz}$). The **S-wave** arrives next ($\sim 144\text{ s}$) with intermediate frequencies, followed by the slower **surface waves** ($\sim 155\text{ s}$ onward) carrying the **lowest frequencies** ($< 2\text{ Hz}$).
+* **Advantage over Step 2:** A single FFT spectrum shows *which* frequencies exist overall, whereas a spectrogram shows *when* each frequency arrives over time.
+
+---
+
+## Step 8: The Magnitude
+* **Role of $\log_{10} R$:** Seismic wave amplitude decays with distance due to geometric spreading. Without $\log_{10} R$, the same earthquake recorded twice as far away would show a smaller PGV and falsely appear weaker (smaller $M$).
+* **Scaling:** Because $M$ increases by $1$ when $\log_{10}(\text{PGV}) / 0.55$ increases by $1$, an earthquake $1$ magnitude unit larger at the same distance produces $10^{0.55} \approx \mathbf{3.55\text{ times}}$ larger PGV.
+
+---
+
+## Step 10: Snakemake Automation
+* **(a) First run after deleting `results/`:** Snakemake builds the DAG and runs `analyse`, `report`, and `all` to generate `results/events.csv` and `results/report.txt`.
+* **(b) Immediate second run:** Snakemake reports *"Nothing to be done (all requested files are present and up to date)"* because no inputs or scripts changed.
+* **(c) Changing wording in `report.py`:** Only `report` (and `all`) reruns; `analyse` is skipped because its inputs (`analyse.py` and the `.csv` files) did not change.
+* **(d) Changing cut-off `b` in `analyse.py`:** Both `analyse` and `report` rerun because `events.csv` depends on `analyse.py`, and `report.txt` depends on `events.csv`. This selective re-execution saves computation time on expensive upstream steps while keeping downstream outputs consistent.
