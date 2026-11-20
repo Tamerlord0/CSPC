@@ -1,5 +1,18 @@
 # CSPC - Computer Science for Physics and Chemistry
 
+## Table of Contents
+
+- [Setup](#setup)
+- [PW1 - Lab A: Reproducible Foundations](#pw1---lab-a-reproducible-foundations)
+- [PW1 - Lab B: Radioactive Decay](#pw1---lab-b-radioactive-decay)
+- [PW2 - Lab A: Numerical Differentiation and Integration](#pw2---lab-a-numerical-differentiation-and-integration)
+- [PW2 - Lab B: Numerical Methods](#pw2---lab-b-numerical-methods)
+- [PW3 - Statistical Analysis of Scientific Data](#pw3---statistical-analysis-of-scientific-data)
+- [PW4 - Machine Learning: Supervised and Unsupervised](#pw4---machine-learning-supervised-and-unsupervised)
+- [PW5 - Signal Processing: Earthquake Location and Magnitude](#pw5---signal-processing-earthquake-location-and-magnitude)
+
+---
+
 ## Setup
 
 Create the environment for PW1 - Lab A:
@@ -8,6 +21,8 @@ Create the environment for PW1 - Lab A:
 conda env create -f PW1/Lab\ A/environment.yml
 conda activate cspc
 ```
+
+---
 
 ## PW1 - Lab A: Reproducible Foundations
 
@@ -19,7 +34,7 @@ conda activate cspc
 **Performance comparison:**
 
 | Implementation | Execution time |
-|---|---:|
+| :--- | ---: |
 | Python loop | 4.30854502 s |
 | NumPy | 0.00022917 s |
 | Speed-up | 18,800.73x |
@@ -30,13 +45,19 @@ conda activate cspc
 
 I learned the basics of Python environments, Git, automated testing, and NumPy. I also solved problems with the environment, file locations, Git setup, and test parameters. AI helped me understand errors and work through some setup and testing steps.
 
+---
+
 ## PW1 - Lab B: Radioactive Decay
 
-The observed count decreased over time and followed the general exponential decay pattern described by \(N(t)=N_0e^{-\lambda t}\), with \(\lambda=0.3\).
+The observed count decreased over time and followed the general exponential decay pattern described by $N(t)=N_0e^{-\lambda t}$, with $\lambda=0.3$.
 
 The Snakemake pipeline runs `plot.py` to generate `figure.png` from `decay_observed.csv` and reruns the step when its inputs change.
 
-![Radioactive Decay](PW1/Lab%20B/figure.png)
+<p align="center">
+  <img src="PW1/Lab%20B/figure.png" alt="Radioactive Decay" width="75%">
+</p>
+
+---
 
 ## PW2 - Lab A: Numerical Differentiation and Integration
 
@@ -45,7 +66,7 @@ The Snakemake pipeline runs `plot.py` to generate `figure.png` from `decay_obser
 Velocity and acceleration were calculated using `np.gradient()`.
 
 | Measurement | Result |
-|---|---:|
+| :--- | ---: |
 | Mean acceleration | -8.58 m/s² |
 | Expected acceleration | -9.81 m/s² |
 | Maximum position difference after integration | 0.785 m |
@@ -54,7 +75,11 @@ Differentiation, especially taking two derivatives, amplified measurement noise 
 
 **Output:** `motion.png`, showing position, velocity, and acceleration over time.
 
-![Motion Analysis](PW2/Lab%20A/motion.png)
+<p align="center">
+  <img src="PW2/Lab%20A/motion.png" alt="Motion Analysis" width="80%">
+</p>
+
+---
 
 ## PW2 - Lab B: Numerical Methods
 
@@ -62,67 +87,74 @@ Differentiation, especially taking two derivatives, amplified measurement noise 
 
 I compared gradient descent, Newton's method, and SLSQP.
 
-**2A - Convex function**
+#### 2A - Convex function
 
-For \(f(x)=(x-3)^2+1\), starting from \(x_0=0\):
+For $f(x)=(x-3)^2+1$, starting from $x_0=0$:
 
 | Method | Minimum location |
-|---|---:|
+| :--- | ---: |
 | Gradient descent | 3.0000 |
 | Newton | 3.0000 |
 | SLSQP | 3.0000 |
 
 All three methods found the global minimum.
 
-**2B - More complex function**
+#### 2B - More complex function
 
-For \(g(x)=x^4-3x^2+x+5\):
+For $g(x)=x^4-3x^2+x+5$:
 
 | Starting point | Gradient descent | Newton | SLSQP |
-|---|---:|---:|---:|
-| \(x_0=0\) | -1.30084 | 0.16994 (maximum) | -1.30086 |
-| \(x_0=2\) | -1.30084 | 1.13090 (minimum) | -1.30064 |
+| :--- | ---: | ---: | ---: |
+| $x_0=0$ | -1.30084 | 0.16994 (maximum) | -1.30086 |
+| $x_0=2$ | -1.30084 | 1.13090 (minimum) | -1.30064 |
 
-Newton's method reached different stationary points depending on the starting point, while gradient descent and SLSQP found the minimum near \(x=-1.30\).
+Newton's method reached different stationary points depending on the starting point, while gradient descent and SLSQP found the minimum near $x=-1.30$.
 
 ### Part 3 - Reaction Rate
 
-I fitted the first-order model \(C(t)=C_0e^{-kt}\) to the measured data using SLSQP with \(0\leq k\leq5\).
+I fitted the first-order model $C(t)=C_0e^{-kt}$ to the measured data using SLSQP with $0\leq k\leq5$.
 
-**Fitted rate constant:** \(k=0.26176137\)
+- **Fitted rate constant:** $k=0.26176137$
+- **Output:** `kinetics.png`
 
-**Output:** `kinetics.png`
-
-![Reaction Kinetics](PW2/Lab%20B/kinetics.png)
+<p align="center">
+  <img src="PW2/Lab%20B/kinetics.png" alt="Reaction Kinetics" width="75%">
+</p>
 
 ### Part 4 - Chemical Equilibrium
 
-For the reaction \(H_2+I_2\rightleftharpoons2HI\), with \(K=15.6\):
+For the reaction $H_2+I_2\rightleftharpoons2HI$, with $K=15.6$:
 
 | Method | Equilibrium extent |
-|---|---:|
+| :--- | ---: |
 | Newton | 0.66384767 |
 | SLSQP | 0.66384743 |
 
 **Equilibrium amounts:**
 
 | Substance | Amount |
-|---|---:|
+| :--- | ---: |
 | H₂ | 0.33615 mol |
 | I₂ | 0.33615 mol |
 | HI | 1.32770 mol |
 
 Both methods gave nearly identical results.
 
-![Chemical Equilibrium](PW2/Lab%20B/equilibrium.png)
+<p align="center">
+  <img src="PW2/Lab%20B/equilibrium.png" alt="Chemical Equilibrium" width="75%">
+</p>
 
 ### Part 5 - Titration
 
 I calculated the pH slope using `np.gradient(pH, V)` and located its maximum.
 
-**Equivalence point:** 50.0 mL
+- **Equivalence point:** 50.0 mL
 
-![Titration Curve](PW2/Lab%20B/titration.png)
+<p align="center">
+  <img src="PW2/Lab%20B/titration.png" alt="Titration Curve" width="75%">
+</p>
+
+---
 
 ## PW3 - Statistical Analysis of Scientific Data
 
@@ -134,14 +166,16 @@ I used pandas to inspect the data and plotted the distributions of `age`, `chol`
 
 **Output:** `distributions.png`
 
-![Variable Distributions](PW3/distributions.png)
+<p align="center">
+  <img src="PW3/distributions.png" alt="Variable Distributions" width="80%">
+</p>
 
-**Normality tests**
+#### Normality tests
 
 I used the Shapiro-Wilk test with a significance level of 0.05.
 
 | Variable | W statistic | p-value | Verdict |
-|---|---:|---:|---|
+| :--- | ---: | ---: | :--- |
 | `age` | 0.9865 | 0.006069 | Non-normal |
 | `chol` | 0.9473 | 5.912 x 10⁻⁹ | Non-normal |
 | `trestbps` | 0.9665 | 1.802 x 10⁻⁶ | Non-normal |
@@ -151,12 +185,12 @@ All p-values were below 0.05, providing evidence against normality.
 
 ### Session 2 - Heart Rate and Age
 
-**Maximum heart rate**
+#### Maximum heart rate
 
 I compared healthy patients (`target = 0`) with patients with heart disease (`target = 1`) using the Mann-Whitney U test because the normality tests indicated non-normal data.
 
 | Group | Mean `thalach` | 95% confidence interval |
-|---|---:|---:|
+| :--- | ---: | ---: |
 | Healthy | 158.38 | 155.42-161.34 |
 | Heart disease | 139.26 | 135.47-143.05 |
 
@@ -166,54 +200,58 @@ The difference was statistically significant. The heart-disease group had a mean
 
 **Output:** `thalach_comparison.png`
 
-![Maximum Heart Rate Comparison](PW3/thalach_comparison.png)
+<p align="center">
+  <img src="PW3/thalach_comparison.png" alt="Maximum Heart Rate Comparison" width="75%">
+</p>
 
-**Age and maximum heart rate**
+#### Age and maximum heart rate
 
 I used Pearson's correlation to measure their linear relationship.
 
 | Correlation | p-value | Conclusion |
-|---:|---:|---|
+| ---: | ---: | :--- |
 | -0.394 | 1.109 x 10⁻¹² | Moderate negative relationship |
 
 Older patients tended to have lower maximum heart rates.
 
 **Output:** `age_thalach.png`
 
-![Age vs Maximum Heart Rate](PW3/age_thalach.png)
+<p align="center">
+  <img src="PW3/age_thalach.png" alt="Age vs Maximum Heart Rate" width="75%">
+</p>
 
 ### Chemical Exposure and Malignancy
 
 **Dataset:** `chemicals cancer.csv` - 1,000 patients.
 
-**Initial correlations**
+#### Initial correlations
 
 I calculated Pearson correlations between each chemical and malignancy without controlling for other variables.
 
 | Chemical | Correlation | p-value |
-|---|---:|---:|
+| :--- | ---: | ---: |
 | Benzene | 0.385 | 1.276 x 10⁻³⁶ |
 | Cadmium | 0.880 | Extremely small |
 
 Initially, cadmium appeared to have the stronger relationship with malignancy.
 
-**Controlling for pollution**
+#### Controlling for pollution
 
 I repeated the analysis for the 201 patients with a pollution index between 40 and 60.
 
 | Chemical | Correlation | p-value |
-|---|---:|---:|
+| :--- | ---: | ---: |
 | Benzene | 0.698 | 1.154 x 10⁻³⁰ |
 | Cadmium | 0.313 | 5.994 x 10⁻⁶ |
 
 Benzene's correlation became stronger, while cadmium's weakened. This suggested that pollution influenced the initial results.
 
-**Multiple regression**
+#### Multiple regression
 
 I then fitted a multiple linear regression model including benzene, cadmium, pollution index, and age. This allowed me to examine each variable while accounting for the others.
 
 | Variable | Coefficient | p-value | Result |
-|---|---:|---:|---|
+| :--- | ---: | ---: | :--- |
 | Benzene | +0.5452 | < 0.001 | Significant |
 | Cadmium | -0.0677 | 0.224 | Not significant |
 | Pollution index | +0.7773 | < 0.001 | Significant |
@@ -228,7 +266,7 @@ I then fitted a multiple linear regression model including benzene, cadmium, pol
 I calculated the proportions and Shannon entropy of the heart-disease `target` column.
 
 | Measure | Result |
-|---|---:|
+| :--- | ---: |
 | Target 0 | 54.13% |
 | Target 1 | 45.87% |
 | Entropy | 0.995 bits |
@@ -239,10 +277,12 @@ The categories were nearly balanced, so predicting the target without additional
 ### PW3 Outputs
 
 | File | Contents |
-|---|---|
+| :--- | :--- |
 | `distributions.png` | Distributions of four continuous variables |
 | `thalach_comparison.png` | Heart-rate group comparison |
 | `age_thalach.png` | Age and maximum heart-rate relationship |
+
+---
 
 ## PW4 - Machine Learning: Supervised and Unsupervised
 
@@ -251,7 +291,7 @@ The categories were nearly balanced, so predicting the target without additional
 **Dataset:** UCI Concrete Compressive Strength (`data/concrete.csv`) — 1,030 laboratory tests (1,005 unique rows after cleaning) with 8 inputs and 1 continuous target.
 
 | Variable | Description | Unit |
-|---|---|---|
+| :--- | :--- | :--- |
 | `cement` | Blast furnace cement | kg/m³ |
 | `slag` | Blast furnace slag | kg/m³ |
 | `ash` | Fly ash | kg/m³ |
@@ -262,7 +302,7 @@ The categories were nearly balanced, so predicting the target without additional
 | `age` | Curing time | days |
 | `strength` | Compressive strength (target) | MPa |
 
-**Data Cleaning and Exploration**
+#### Data Cleaning and Exploration
 
 I checked for missing values (0 found) and duplicate rows (25 found), then removed the duplicates before splitting. Keeping duplicate rows would cause data leakage if the same test appeared in both the training and test sets, artificially inflating test scores.
 
@@ -270,16 +310,18 @@ From `describe()`, aggregate features (`coarse_agg`, `fine_agg`) and `cement` op
 
 **Output:** `eda_plots.png`
 
-![Concrete EDA Plots](PW4/results/eda_plots.png)
+<p align="center">
+  <img src="PW4/results/eda_plots.png" alt="Concrete EDA Plots" width="80%">
+</p>
 
-**Linear and Polynomial Regression**
+#### Linear and Polynomial Regression
 
 I split the data (80% train, 20% test) and fitted a multiple linear regression model. Plotting test residuals against `age` on a log scale showed a systematic curved pattern, indicating that a linear model could not capture the non-linear curing behavior.
 
 To capture non-linearity, I tested polynomial features from degree 1 to 4 inside a pipeline with `StandardScaler()`:
 
 | Degree | Features ($p$) | Behavior |
-|---:|---:|---|
+| ---: | ---: | :--- |
 | 1 | 8 | Baseline linear fit; underfits non-linear curing trends. |
 | 2 | 44 | **Chosen model.** Significantly lowers test RMSE and raises test $R^2$ without overfitting. |
 | 3 | 164 | Slight improvement on train, but test error begins to plateau. |
@@ -289,21 +331,27 @@ Adjusted $R^2$ alone does not protect against degree 4 overfitting because it is
 
 **Output:** `residuals.png`
 
-![Linear Regression Residuals](PW4/results/residuals.png)
+<p align="center">
+  <img src="PW4/results/residuals.png" alt="Linear Regression Residuals" width="75%">
+</p>
 
-**Classification: KNN and Decision Tree**
+#### Classification: KNN and Decision Tree
 
 I converted `strength` into a binary target (`1` if $\ge 40\text{ MPa}$, `0` otherwise) and used a stratified 80/20 split.
 
-* **K-Nearest Neighbors (KNN):** Sweeping $K \in \{1, 3, 5, 7, 15, 25, 51, 101\}$ showed that $K=1$ overfitted and very large $K$ underfitted. **$K=7$** gave the best balance of test accuracy and stability. Removing `StandardScaler()` caused accuracy to drop significantly because distance calculations were dominated by large-scale aggregate columns. Testing across 5 random seeds (`0..4`) showed a narrow spread, confirming the result was stable.
-* **Decision Tree:** Sweeping `max_depth` showed that an unlimited tree (`None`) reached 100% training accuracy while test accuracy dropped due to overfitting. **`max_depth = 4`** was chosen because it achieved near-peak test accuracy while remaining easy to read. The root split divided mixes based on `age` or `cement`, which aligns with physical hydration rules.
+- **K-Nearest Neighbors (KNN):** Sweeping $K \in \{1, 3, 5, 7, 15, 25, 51, 101\}$ showed that $K=1$ overfitted and very large $K$ underfitted. **$K=7$** gave the best balance of test accuracy and stability. Removing `StandardScaler()` caused accuracy to drop significantly because distance calculations were dominated by large-scale aggregate columns. Testing across 5 random seeds (`0..4`) showed a narrow spread, confirming the result was stable.
+- **Decision Tree:** Sweeping `max_depth` showed that an unlimited tree (`None`) reached 100% training accuracy while test accuracy dropped due to overfitting. **`max_depth = 4`** was chosen because it achieved near-peak test accuracy while remaining easy to read. The root split divided mixes based on `age` or `cement`, which aligns with physical hydration rules.
 
 **Outputs:** `knn_acc.png`, `tree_acc.png`
 
-![KNN Accuracy](PW4/results/knn_acc.png)
-![Decision Tree Accuracy](PW4/results/tree_acc.png)
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="PW4/results/knn_acc.png" alt="KNN Accuracy"></td>
+    <td align="center" width="50%"><img src="PW4/results/tree_acc.png" alt="Decision Tree Accuracy"></td>
+  </tr>
+</table>
 
-**Metrics and Safety Thresholds**
+#### Metrics and Safety Thresholds
 
 On a construction site, a **False Positive (FP)**—predicting a batch reaches 40 MPa when it actually does not—is the dangerous mistake because it risks structural failure. **Precision** directly controls False Positives.
 
@@ -311,7 +359,7 @@ Sweeping probability thresholds ($0.3, 0.5, 0.7, 0.9$) showed that raising the t
 
 **Output:** `A_metrics.csv`
 
-**Feature Importance and Physics Bonus**
+#### Feature Importance and Physics Bonus
 
 Raw regression coefficients cannot be compared directly because they carry different units ($\text{MPa per kg/m}^3$ vs. $\text{MPa per day}$). Standardized coefficients, decision tree importances, and permutation importances all agreed that `age`, `cement`, and `water` were the strongest predictors. This matches concrete engineering principles (hydration time and water-to-cement ratio), though high statistical importance alone does not prove physical causation without controlled experiments.
 
@@ -319,47 +367,53 @@ In the bonus step, replacing raw inputs with two domain-engineered features—$\
 
 **Output:** `feature_importance.png`
 
-![Feature Importance](PW4/results/feature_importance.png)
-
----
+<p align="center">
+  <img src="PW4/results/feature_importance.png" alt="Feature Importance" width="75%">
+</p>
 
 ### Session B - Wine Chemistry (Unsupervised Learning)
 
 **Dataset:** UCI Wine dataset — 178 Italian wines across 3 grape cultivars, described by 13 chemical measurements. Cultivar labels were hidden until the final evaluation.
 
-**PCA: Raw vs. Scaled Data**
+#### PCA: Raw vs. Scaled Data
 
 From `describe()`, `proline` and `magnesium` had the largest numerical ranges and standard deviations, while `nonflavanoid_phenols` and `hue` had the smallest.
 
-* **Raw PCA:** Running PCA without scaling caused PC1 to capture over 99% of total variance, almost entirely driven by `proline`. This did not reflect true chemical differences—only differences in measurement scale.
-* **Scaled PCA:** Applying `StandardScaler()` first put all 13 chemicals on equal footing. **8 principal components** were needed to capture 90% of the cumulative variance, while the PC1–PC2 plane captured about 55%. PC1 separated wines by phenol, flavonoid, and color intensity levels, while PC2 separated wines by alcohol, ash, and acid content.
+- **Raw PCA:** Running PCA without scaling caused PC1 to capture over 99% of total variance, almost entirely driven by `proline`. This did not reflect true chemical differences—only differences in measurement scale.
+- **Scaled PCA:** Applying `StandardScaler()` first put all 13 chemicals on equal footing. **8 principal components** were needed to capture 90% of the cumulative variance, while the PC1–PC2 plane captured about 55%. PC1 separated wines by phenol, flavonoid, and color intensity levels, while PC2 separated wines by alcohol, ash, and acid content.
 
 **Outputs:** `scree_plot.png`, `pca_unlabeled.png`
 
-![Scree Plot](PW4/results/scree_plot.png)
+<p align="center">
+  <img src="PW4/results/scree_plot.png" alt="Scree Plot" width="75%">
+</p>
 
-**K-Means Clustering**
+#### K-Means Clustering
 
 Running K-Means with `n_init=1` across seeds `0..7` produced different inertia values because random starting centroids can get trapped in local minima. Using `n_init=10` ran 10 initializations and kept the lowest inertia solution.
 
 Plotting inertia for $k = 1 \dots 10$ showed a clear elbow at **$k = 3$**. Choosing $k$ simply by minimizing inertia is invalid because inertia drops to 0 when $k = n$ (every point in its own cluster).
 
 Converting the $k=3$ cluster centers back to real units revealed three distinct chemical profiles:
-* **Cluster 0:** High flavonoids and total phenols with moderate alcohol.
-* **Cluster 1:** High alcohol, high proline, and deep color intensity.
-* **Cluster 2:** High malic acid and non-flavonoid phenols with low total phenols and lower alcohol.
+- **Cluster 0:** High flavonoids and total phenols with moderate alcohol.
+- **Cluster 1:** High alcohol, high proline, and deep color intensity.
+- **Cluster 2:** High malic acid and non-flavonoid phenols with low total phenols and lower alcohol.
 
 **Outputs:** `kmeans_elbow.png`, `pca_clusters.png`
 
-![K-Means Elbow](PW4/results/kmeans_elbow.png)
-![K-Means Clusters on PCA](PW4/results/pca_clusters.png)
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="PW4/results/kmeans_elbow.png" alt="K-Means Elbow"></td>
+    <td align="center" width="50%"><img src="PW4/results/pca_clusters.png" alt="K-Means Clusters on PCA"></td>
+  </tr>
+</table>
 
-**Comparison with True Cultivars**
+#### Comparison with True Cultivars
 
 Comparing K-Means clusters ($k=3$) against the hidden cultivar labels using a crosstab gave the following majority-matching agreement scores:
 
 | Feature Space | Agreement Score | Explanation |
-|---|---:|---|
+| :--- | ---: | :--- |
 | Scaled Data (13 features) | Highest (~96.6%) | All chemical features contribute equally. |
 | Top 2 PCs (Scaled) | Slightly lower (~95.5%) | Dropping PCs 3–13 loses minor separating details. |
 | Raw Unscaled Data | Lowest (~70.2%) | Dominated by `proline` scale rather than full chemistry. |
@@ -368,19 +422,17 @@ Even though K-Means never saw the cultivar labels, it recovered the three grape 
 
 **Output:** `B_agreement.csv`
 
-**Bonus - Supervised Comparison**
+#### Bonus - Supervised Comparison
 
 Splitting the wine dataset (`test_size=0.25`, `random_state=42`, `stratify=cultivar`) and training supervised KNN classifiers (`n_neighbors=5`) gave a test accuracy of **97.78%** (44/45) on all 13 scaled features and **95.56%** (43/45) using only the top 2 principal components.
 
 These supervised accuracies are slightly higher than the unsupervised K-Means agreement scores from B6 (~96.6% and ~95.5%). However, **this comparison is not completely fair** because:
-* **Data usage:** K-Means was evaluated across all 178 wines without ever seeing any ground-truth labels during training, whereas KNN learned directly from 75% of the labeled wines and was scored only on the remaining 25% test split.
-* **Metric optimization:** In B6, cluster numbers were assigned arbitrarily and matched post-hoc by majority vote, whereas supervised KNN explicitly optimized class boundaries using the true labels.
-
----
+- **Data usage:** K-Means was evaluated across all 178 wines without ever seeing any ground-truth labels during training, whereas KNN learned directly from 75% of the labeled wines and was scored only on the remaining 25% test split.
+- **Metric optimization:** In B6, cluster numbers were assigned arbitrarily and matched post-hoc by majority vote, whereas supervised KNN explicitly optimized class boundaries using the true labels.
 
 ### Snakemake Automation and Overall Conclusion
 
-**Reproducible Workflow:** I automated the entire PW4 pipeline using a `Snakefile` with rules `all`, `fetch`, `session_a`, and `session_b`. Running `snakemake --cores 1` executes all scripts in dependency order and generates all outputs from scratch. Running it a second time reports *"Nothing to be done"* because all targets are up to date. Editing a parameter in `sessionA.py` causes only `session_a` to rerun, leaving `fetch` and `session_b` untouched because their inputs did not change.
+**Reproducible Workflow:** I automated the entire PW4 pipeline using a `Snakefile` with rules `all`, `fetch`, `session_a`, and `session_b`. Running `snakemake --cores 1` executes all scripts in dependency order and generates all outputs from scratch. Running it a second time reports "Nothing to be done" because all targets are up to date. Editing a parameter in `sessionA.py` causes only `session_a` to rerun, leaving `fetch` and `session_b` untouched because their inputs did not change.
 
 ### Overall Conclusion
 
@@ -388,84 +440,92 @@ Across these practicals, I worked with reproducible environments, automated test
 
 In PW3 and PW4, the analyses demonstrated how misleading raw data can be without proper methodology: confounding variables distorted simple correlations, while unscaled inputs distorted distance-based models (KNN, PCA, K-Means). Combining proper validation, feature scaling, and physical domain knowledge (water-to-binder ratio, logarithmic curing time, and safety-driven precision thresholds) produced more reliable and interpretable scientific models.
 
+---
 
-# Practical Work 5: Signal Processing — Earthquake Location and Magnitude
+## PW5 - Signal Processing: Earthquake Location and Magnitude
 
-## Summary of Results
+### Summary of Results
 
 | Event | $t_P$ (s) | $t_S$ (s) | Distance $R$ (km) | PGV (cm/s) | Magnitude $M$ |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | `seismogram_A.csv` | 108.42 | 144.08 | 306.13 | 1.5105 | 6.66 |
 | `seismogram_B.csv` | 84.25 | 102.43 | 156.07 | 0.5711 | 5.36 |
 
-* **Closer earthquake:** `seismogram_B.csv` (156.07 km vs. 306.13 km)
-* **Stronger earthquake:** `seismogram_A.csv` ($M = 6.66$ vs. $M = 5.36$)
+- **Closer earthquake:** `seismogram_B.csv` (156.07 km vs. 306.13 km)
+- **Stronger earthquake:** `seismogram_A.csv` ($M = 6.66$ vs. $M = 5.36$)
 
----
+### Step 1: Look at the Record
 
-## Step 1: Look at the Record
-![Three Channels](PW5/results/step1_record.png)
-![First 60 Seconds](PW5/results/step1_zoom60.png)
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="PW5/results/step1_record.png" alt="Three Channels"></td>
+    <td align="center" width="50%"><img src="PW5/results/step1_zoom60.png" alt="First 60 Seconds"></td>
+  </tr>
+</table>
 
-* **Observations:** The first, weaker P-wave shaking appears most clearly on the vertical (**Z**) channel because P-waves push and pull ground particles vertically as they arrive steeply from depth. The later, stronger S-wave and surface wave shaking is largest on the horizontal (**N** and **E**) channels due to horizontal shear motion.
-* **First 60 s:** The station is not completely still before the earthquake; continuous low-amplitude background seismic noise is always present.
+- **Observations:** The first, weaker P-wave shaking appears most clearly on the vertical (**Z**) channel because P-waves push and pull ground particles vertically as they arrive steeply from depth. The later, stronger S-wave and surface wave shaking is largest on the horizontal (**N** and **E**) channels due to horizontal shear motion.
+- **First 60 s:** The station is not completely still before the earthquake; continuous low-amplitude background seismic noise is always present.
 
----
+### Step 2: The Frequency Spectrum
 
-## Step 2: The Frequency Spectrum
-![FFT Array Index vs Frequency](PW5/results/step2a_fft.png)
-![Log-Log Spectrum](PW5/results/step2b_loglog.png)
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="PW5/results/step2a_fft.png" alt="FFT Array Index vs Frequency"></td>
+    <td align="center" width="50%"><img src="PW5/results/step2b_loglog.png" alt="Log-Log Spectrum"></td>
+  </tr>
+</table>
 
-* **What `fftfreq` adds & mirroring:** `fftfreq` maps each array index to its physical frequency in Hz using the sampling interval $1/f_s$. Because the input signal is purely real-valued, its Fourier transform is conjugate-symmetric, causing the positive and negative frequency amplitudes to mirror each other around $0\text{ Hz}$.
-* **Background noise vs. earthquake energy:** The quiet background noise (ocean microseism) is strongest at low frequencies around **$0.1\text{–}0.3\text{ Hz}$**. The earthquake adds most of its energy in the **$0.5\text{–}10\text{ Hz}$** band.
+- **What `fftfreq` adds & mirroring:** `fftfreq` maps each array index to its physical frequency in Hz using the sampling interval $1/f_s$. Because the input signal is purely real-valued, its Fourier transform is conjugate-symmetric, causing the positive and negative frequency amplitudes to mirror each other around $0\text{ Hz}$.
+- **Background noise vs. earthquake energy:** The quiet background noise (ocean microseism) is strongest at low frequencies around **$0.1\text{–}0.3\text{ Hz}$**. The earthquake adds most of its energy in the **$0.5\text{–}10\text{ Hz}$** band.
 
----
+### Step 3: Inverse Transform & Band-Pass Filter
 
-## Step 3: Inverse Transform & Band-Pass Filter
-![Removed Noise](PW5/results/step3_removed.png)
+<p align="center">
+  <img src="PW5/results/step3_removed.png" alt="Removed Noise" width="75%">
+</p>
 
-* **Why filtering relies on `allclose`:** `ifft(fft(Z)).real` reconstructs the exact original signal, proving the Fourier transform is lossless and invertible. Zeroing out unwanted frequencies in the frequency domain therefore modifies only those specific components when transforming back to time.
-* **Cut-off justification ($0.5\text{–}10\text{ Hz}$):** The $0.5\text{ Hz}$ high-pass cut-off removes the strong low-frequency ocean microseism noise below $0.5\text{ Hz}$, while the $10\text{ Hz}$ low-pass cut-off removes high-frequency instrument/cultural noise above the earthquake's main energy band.
-* **What was removed ($Z - Z_{\text{clean}}$):** The removed signal shows the continuous, slow-oscillating microseism wave train present throughout the entire recording.
+- **Why filtering relies on `allclose`:** `ifft(fft(Z)).real` reconstructs the exact original signal, proving the Fourier transform is lossless and invertible. Zeroing out unwanted frequencies in the frequency domain therefore modifies only those specific components when transforming back to time.
+- **Cut-off justification ($0.5\text{–}10\text{ Hz}$):** The $0.5\text{ Hz}$ high-pass cut-off removes the strong low-frequency ocean microseism noise below $0.5\text{ Hz}$, while the $10\text{ Hz}$ low-pass cut-off removes high-frequency instrument/cultural noise above the earthquake's main energy band.
+- **What was removed ($Z - Z_{\text{clean}}$):** The removed signal shows the continuous, slow-oscillating microseism wave train present throughout the entire recording.
 
----
+### Step 4: The Envelope
 
-## Step 4: The Envelope
-![Envelopes Comparison](PW5/results/step4_envelopes.png)
+<p align="center">
+  <img src="PW5/results/step4_envelopes.png" alt="Envelopes Comparison" width="75%">
+</p>
 
-* **Window size effects:** A window that is **too short** ($0.05\text{ s}$) follows individual wave oscillations instead of smoothing them, creating jagged spikes that can trigger false arrivals. A window that is **too long** ($5\text{ s}$) smears the signal out in time, flattening the onset and delaying the apparent start of the shaking.
+- **Window size effects:** A window that is **too short** ($0.05\text{ s}$) follows individual wave oscillations instead of smoothing them, creating jagged spikes that can trigger false arrivals. A window that is **too long** ($5\text{ s}$) smears the signal out in time, flattening the onset and delaying the apparent start of the shaking.
 
----
+### Step 5: Arrival Times
 
-## Step 5: Arrival Times
-![Arrival Times](PW5/results/step5_arrivals.png)
+<p align="center">
+  <img src="PW5/results/step5_arrivals.png" alt="Arrival Times" width="75%">
+</p>
 
-* **Why not use the maximum as arrival time:** For `seismogram_A.csv`, $t_S = 144.08\text{ s}$, whereas the horizontal envelope maximum occurs later at $152.03\text{ s}$. An arrival time marks the *first* energy reaching the station via the fastest path; peak amplitude arrives later as scattered waves and slower surface waves build up. Using the maximum would overestimate $t_S - t_P$ and yield a falsely large distance $R$.
+- **Why not use the maximum as arrival time:** For `seismogram_A.csv`, $t_S = 144.08\text{ s}$, whereas the horizontal envelope maximum occurs later at $152.03\text{ s}$. An arrival time marks the first energy reaching the station via the fastest path; peak amplitude arrives later as scattered waves and slower surface waves build up. Using the maximum would overestimate $t_S - t_P$ and yield a falsely large distance $R$.
 
----
+### Step 6: Distance and Origin Time
 
-## Step 6: Distance and Origin Time
-* **Distance & Uncertainty:** For `seismogram_A.csv`, $R = 306.13\text{ km}$. A $1\text{ s}$ uncertainty in $t_S$ changes $R$ by $\frac{1}{1/3.6 - 1/6.2} \approx \mathbf{8.58\text{ km}}$.
-* **Origin Time:** $t_0 = t_P - R / v_P = 108.42 - 306.13 / 6.2 = \mathbf{59.04\text{ s}}$.
+- **Distance & Uncertainty:** For `seismogram_A.csv`, $R = 306.13\text{ km}$. A $1\text{ s}$ uncertainty in $t_S$ changes $R$ by $\frac{1}{1/3.6 - 1/6.2} \approx \mathbf{8.58\text{ km}}$.
+- **Origin Time:** $t_0 = t_P - R / v_P = 108.42 - 306.13 / 6.2 = \mathbf{59.04\text{ s}}$.
 
----
+### Step 7: The Spectrogram
 
-## Step 7: The Spectrogram
-![Spectrogram](PW5/results/step7_spectrogram.png)
+<p align="center">
+  <img src="PW5/results/step7_spectrogram.png" alt="Spectrogram" width="75%">
+</p>
 
-* **Wave identification:** The **P-wave** arrives first ($\sim 108\text{ s}$) with the **highest frequencies** (up to $10\text{ Hz}$). The **S-wave** arrives next ($\sim 144\text{ s}$) with intermediate frequencies, followed by the slower **surface waves** ($\sim 155\text{ s}$ onward) carrying the **lowest frequencies** ($< 2\text{ Hz}$).
-* **Advantage over Step 2:** A single FFT spectrum shows *which* frequencies exist overall, whereas a spectrogram shows *when* each frequency arrives over time.
+- **Wave identification:** The **P-wave** arrives first ($\sim 108\text{ s}$) with the **highest frequencies** (up to $10\text{ Hz}$). The **S-wave** arrives next ($\sim 144\text{ s}$) with intermediate frequencies, followed by the slower **surface waves** ($\sim 155\text{ s}$ onward) carrying the **lowest frequencies** ($< 2\text{ Hz}$).
+- **Advantage over Step 2:** A single FFT spectrum shows which frequencies exist overall, whereas a spectrogram shows when each frequency arrives over time.
 
----
+### Step 8: The Magnitude
 
-## Step 8: The Magnitude
-* **Role of $\log_{10} R$:** Seismic wave amplitude decays with distance due to geometric spreading. Without $\log_{10} R$, the same earthquake recorded twice as far away would show a smaller PGV and falsely appear weaker (smaller $M$).
-* **Scaling:** Because $M$ increases by $1$ when $\log_{10}(\text{PGV}) / 0.55$ increases by $1$, an earthquake $1$ magnitude unit larger at the same distance produces $10^{0.55} \approx \mathbf{3.55\text{ times}}$ larger PGV.
+- **Role of $\log_{10} R$:** Seismic wave amplitude decays with distance due to geometric spreading. Without $\log_{10} R$, the same earthquake recorded twice as far away would show a smaller PGV and falsely appear weaker (smaller $M$).
+- **Scaling:** Because $M$ increases by $1$ when $\log_{10}(\text{PGV}) / 0.55$ increases by $1$, an earthquake $1$ magnitude unit larger at the same distance produces $10^{0.55} \approx \mathbf{3.55\text{ times}}$ larger PGV.
 
----
+### Step 10: Snakemake Automation
 
-## Step 10: Snakemake Automation
-* **(a) First run after deleting `results/`:** Snakemake builds the DAG and runs `analyse`, `report`, and `all` to generate `results/events.csv` and `results/report.txt`.
-* **(b) Immediate second run:** Snakemake reports *"Nothing to be done (all requested files are present and up to date)"* because no inputs or scripts changed.
-* **(c) Changing wording in `report.py`:** Only `report` (and `all`) reruns; `analyse` is skipped because its inputs (`analyse.py` and the `.csv` files) did not change.
-* **(d) Changing cut-off `b` in `analyse.py`:** Both `analyse` and `report` rerun because `events.csv` depends on `analyse.py`, and `report.txt` depends on `events.csv`. This selective re-execution saves computation time on expensive upstream steps while keeping downstream outputs consistent.
+- **(a) First run after deleting `results/`:** Snakemake builds the DAG and runs `analyse`, `report`, and `all` to generate `results/events.csv` and `results/report.txt`.
+- **(b) Immediate second run:** Snakemake reports "Nothing to be done (all requested files are present and up to date)" because no inputs or scripts changed.
+- **(c) Changing wording in `report.py`:** Only `report` (and `all`) reruns; `analyse` is skipped because its inputs (`analyse.py` and the `.csv` files) did not change.
+- **(d) Changing cut-off `b` in `analyse.py`:** Both `analyse` and `report` rerun because `events.csv` depends on `analyse.py`, and `report.txt` depends on `events.csv`. This selective re-execution saves computation time on expensive upstream steps while keeping downstream outputs consistent.
