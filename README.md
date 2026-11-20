@@ -404,8 +404,8 @@ In PW3 and PW4, the analyses demonstrated how misleading raw data can be without
 ---
 
 ## Step 1: Look at the Record
-![Three Channels](results/step1_record.png)
-![First 60 Seconds](results/step1_zoom60.png)
+![Three Channels](PW5/results/step1_record.png)
+![First 60 Seconds](PW5/results/step1_zoom60.png)
 
 * **Observations:** The first, weaker P-wave shaking appears most clearly on the vertical (**Z**) channel because P-waves push and pull ground particles vertically as they arrive steeply from depth. The later, stronger S-wave and surface wave shaking is largest on the horizontal (**N** and **E**) channels due to horizontal shear motion.
 * **First 60 s:** The station is not completely still before the earthquake; continuous low-amplitude background seismic noise is always present.
@@ -413,8 +413,8 @@ In PW3 and PW4, the analyses demonstrated how misleading raw data can be without
 ---
 
 ## Step 2: The Frequency Spectrum
-![FFT Array Index vs Frequency](results/step2a_fft.png)
-![Log-Log Spectrum](results/step2b_loglog.png)
+![FFT Array Index vs Frequency](PW5/results/step2a_fft.png)
+![Log-Log Spectrum](PW5/results/step2b_loglog.png)
 
 * **What `fftfreq` adds & mirroring:** `fftfreq` maps each array index to its physical frequency in Hz using the sampling interval $1/f_s$. Because the input signal is purely real-valued, its Fourier transform is conjugate-symmetric, causing the positive and negative frequency amplitudes to mirror each other around $0\text{ Hz}$.
 * **Background noise vs. earthquake energy:** The quiet background noise (ocean microseism) is strongest at low frequencies around **$0.1\text{–}0.3\text{ Hz}$**. The earthquake adds most of its energy in the **$0.5\text{–}10\text{ Hz}$** band.
@@ -422,7 +422,7 @@ In PW3 and PW4, the analyses demonstrated how misleading raw data can be without
 ---
 
 ## Step 3: Inverse Transform & Band-Pass Filter
-![Removed Noise](results/step3_removed.png)
+![Removed Noise](PW5/results/step3_removed.png)
 
 * **Why filtering relies on `allclose`:** `ifft(fft(Z)).real` reconstructs the exact original signal, proving the Fourier transform is lossless and invertible. Zeroing out unwanted frequencies in the frequency domain therefore modifies only those specific components when transforming back to time.
 * **Cut-off justification ($0.5\text{–}10\text{ Hz}$):** The $0.5\text{ Hz}$ high-pass cut-off removes the strong low-frequency ocean microseism noise below $0.5\text{ Hz}$, while the $10\text{ Hz}$ low-pass cut-off removes high-frequency instrument/cultural noise above the earthquake's main energy band.
@@ -431,14 +431,14 @@ In PW3 and PW4, the analyses demonstrated how misleading raw data can be without
 ---
 
 ## Step 4: The Envelope
-![Envelopes Comparison](results/step4_envelopes.png)
+![Envelopes Comparison](PW5/results/step4_envelopes.png)
 
 * **Window size effects:** A window that is **too short** ($0.05\text{ s}$) follows individual wave oscillations instead of smoothing them, creating jagged spikes that can trigger false arrivals. A window that is **too long** ($5\text{ s}$) smears the signal out in time, flattening the onset and delaying the apparent start of the shaking.
 
 ---
 
 ## Step 5: Arrival Times
-![Arrival Times](results/step5_arrivals.png)
+![Arrival Times](PW5/results/step5_arrivals.png)
 
 * **Why not use the maximum as arrival time:** For `seismogram_A.csv`, $t_S = 144.08\text{ s}$, whereas the horizontal envelope maximum occurs later at $152.03\text{ s}$. An arrival time marks the *first* energy reaching the station via the fastest path; peak amplitude arrives later as scattered waves and slower surface waves build up. Using the maximum would overestimate $t_S - t_P$ and yield a falsely large distance $R$.
 
@@ -451,7 +451,7 @@ In PW3 and PW4, the analyses demonstrated how misleading raw data can be without
 ---
 
 ## Step 7: The Spectrogram
-![Spectrogram](results/step7_spectrogram.png)
+![Spectrogram](PW5/results/step7_spectrogram.png)
 
 * **Wave identification:** The **P-wave** arrives first ($\sim 108\text{ s}$) with the **highest frequencies** (up to $10\text{ Hz}$). The **S-wave** arrives next ($\sim 144\text{ s}$) with intermediate frequencies, followed by the slower **surface waves** ($\sim 155\text{ s}$ onward) carrying the **lowest frequencies** ($< 2\text{ Hz}$).
 * **Advantage over Step 2:** A single FFT spectrum shows *which* frequencies exist overall, whereas a spectrogram shows *when* each frequency arrives over time.
