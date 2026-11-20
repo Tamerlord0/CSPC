@@ -1,0 +1,5 @@
+Event seismogram_A.csv: P-arrival at 108.42 s, S-arrival at 144.08 s, distance R = 306.127 km, PGV = 1.51049 cm/s, Magnitude M = 6.664.
+Event seismogram_B.csv: P-arrival at 84.25 s, S-arrival at 102.43 s, distance R = 156.068 km, PGV = 0.57113 cm/s, Magnitude M = 5.364.
+
+Closest event: seismogram_B.csv
+Strongest event: seismogram_A.csv
